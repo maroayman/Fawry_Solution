@@ -51,7 +51,7 @@ if [ "$invert_match" == true ] && [ -z "$search_term" ]; then
 fi
 
 # Build the grep command
-grep_cmd="grep -n"
+grep_cmd="grep -i -n"  # Added "-i" for case insensitive searching
 [ "$invert_match" == true ] && grep_cmd="$grep_cmd -v"
 [ "$include_vn_v" == true ] && search_term="$search_term|vn|v"
 
