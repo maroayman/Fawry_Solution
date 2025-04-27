@@ -1,8 +1,24 @@
 #!/bin/bash
 
+# Function to display help message
+print_usage() {
+    echo "Usage: $0 [-n] [-v] <search-term> <filename>"
+    echo "Options:"
+    echo "  -n  Show line numbers in results"
+    echo "  -v  Invert match (show lines that do NOT contain the search term)"
+    echo "  --help  Show this help message and exit"
+    exit 0
+}
+
+# Check if help flag is present
+if [[ "$1" == "--help" ]]; then
+    print_usage
+fi
+
 # Check if at least two arguments are provided
 if [ $# -lt 2 ]; then
-    echo "Usage: $0 [-n] [-v] <search-term> <filename>"
+    echo "Error: Missing search term or filename!"
+    echo "Use --help for usage information."
     exit 1
 fi
 
@@ -17,6 +33,7 @@ while [[ "$1" == -* ]]; do
     case "$1" in
         *n*) include_vn_v=true ;;  # Enables `-n`
         *v*) invert_match=true ;;  # Enables `-v`
+        --help) print_usage ;;  # Handle help flag
         *) echo "Error: Unknown option '$1'"; exit 1 ;;
     esac
     shift
