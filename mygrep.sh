@@ -10,50 +10,38 @@ print_usage() {
     exit 0
 }
 
-# Check if help flag is present
+# Initialize variables
+include_line_numbers=false
+invert_match=false
+
+# ------------------------------
+# Process options using getopts
+# ------------------------------
+while getopts "nv" opt; do
+    case $opt in
+        n) include_line_numbers=true ;;
+        v) invert_match=true ;;
+        *) print_usage ;;  # Handle invalid options
+    esac
+done
+
+# Shift processed options
+shift $((OPTIND - 1))
+
+# Check for help flag
 if [[ "$1" == "--help" ]]; then
     print_usage
 fi
 
-# Check if at least two arguments are provided
+# Ensure search term and filename are provided
 if [ $# -lt 2 ]; then
     echo "Error: Missing search term or filename!"
     echo "Use --help for usage information."
     exit 1
 fi
 
-# Initialize variables
-search_term=""
-file=""
-include_vn_v=false
-invert_match=false
-
-# Process flags (supporting `-n`, `-v`, and combined `-nv` or `-vn`)
-while [[ "$1" == -* ]]; do
-    case "$1" in
-        *n*) include_vn_v=true ;;  # Enables `-n`
-        *v*) invert_match=true ;;  # Enables `-v`
-        --help) print_usage ;;  # Handle help flag
-        *) echo "Error: Unknown option '$1'"; exit 1 ;;
-    esac
-    shift
-done
-
-# Ensure the script does not proceed with empty search terms
-if [ -z "$1" ]; then
-    echo "Error: Missing search term!"
-    exit 1
-else
-    search_term="$1"
-fi
-
-# Ensure the script does not proceed with missing file
-if [ -z "$2" ]; then
-    echo "Error: Missing filename!"
-    exit 1
-else
-    file="$2"
-fi
+search_term="$1"
+file="$2"
 
 # Check if the file exists
 if [ ! -f "$file" ]; then
@@ -61,16 +49,10 @@ if [ ! -f "$file" ]; then
     exit 1
 fi
 
-# Warn if `-v` is used but no search term is provided
-if [ "$invert_match" == true ] && [ -z "$search_term" ]; then
-    echo "Error: You used the -v flag but did not provide a search string!"
-    exit 1
-fi
-
 # Build the grep command
-grep_cmd="grep -i -n"  # Added "-i" for case insensitive searching
+grep_cmd="grep -i"
 [ "$invert_match" == true ] && grep_cmd="$grep_cmd -v"
-[ "$include_vn_v" == true ] && search_term="$search_term|vn|v"
+[ "$include_line_numbers" == true ] && grep_cmd="$grep_cmd -n"
 
 # Execute the search
 $grep_cmd -E "$search_term" "$file"
