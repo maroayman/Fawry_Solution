@@ -2,10 +2,12 @@
 
 # Function to display help message
 print_usage() {
-    echo "Usage: $0 [-n] [-v] <search-term> <filename>"
+    echo "Usage: $0 [-n] [-v] [-nv] [-vn] <search-term> <filename>"
     echo "Options:"
-    echo "  -n  Show line numbers in results"
-    echo "  -v  Invert match (show lines that do NOT contain the search term)"
+    echo "  -n   Show line numbers in results"
+    echo "  -v   Invert match (show lines that do NOT contain the search term)"
+    echo "  -nv  Show line numbers and invert match together"
+    echo "  -vn  Same as -nv (order doesn't matter)"
     echo "  --help  Show this help message and exit"
     exit 0
 }
