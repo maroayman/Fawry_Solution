@@ -1,3 +1,6 @@
+# Link to the Task
+https://fawry-internship.notion.site/Internship-Task-1e273781f94380f4a4d0ffb4d5de9f23#1e273781f943808899c5cb31b6b67b47
+
 # Search Script
 
 This Bash script allows users to search for a term within a file, with options to display line numbers and invert matches.
